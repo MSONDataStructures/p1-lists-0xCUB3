@@ -35,16 +35,21 @@ public class MyLinkedList
         // These fields both default to null.
         public Integer value;
         public Node next;
+
+        public Node(Integer value) {
+            this.value = value;
+        }
     }
 
     private Node first;
+    private int size;
 
     /**
      * Constructs an empty list.
      */
     public MyLinkedList() {
         first = null;
-        // TODO: you can add code here
+        size = 0;
     }
 
     /**
@@ -53,7 +58,13 @@ public class MyLinkedList
      * @throws NullPointerException if item is null
      */
     public void addFirst(Integer item) {
-        // TODO: your code goes here
+        if(item == null){
+            throw new NullPointerException();
+        }
+        Node newNode = new Node(item);
+        newNode.next = first;
+        first = newNode;
+        size++;
     }
 
     /**
@@ -65,7 +76,26 @@ public class MyLinkedList
      * @throws NullPointerException if item is null
      */
     public void add(int index, Integer item) {
-        // TODO: your code goes here
+        if(item == null){
+            throw new NullPointerException();
+        }
+        if(index < 0 || index > size){
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (index == 0) {
+            addFirst(item);
+            return;
+        }
+
+        Node current = first;
+        for(int i = 0; i < index - 1; i++){
+            current = current.next;
+        }
+        Node newNode = new Node(item);
+        newNode.next = current.next;
+        current.next = newNode;
+        size++;
     }
 
     /**
@@ -75,8 +105,22 @@ public class MyLinkedList
      * @return the Integer that was removed from the list
      */
     public Integer remove(int index) {
-        // TODO: modify the code here
-        return null;
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        size--;
+        if(index == 0){
+            int temp = first.value;
+            first = first.next;
+            return temp;
+        }
+        Node current = first;
+        for(int i = 0; i < index - 1; i++){
+            current = current.next;
+        }
+        int temp = current.next.value;
+        current.next = current.next.next;
+        return temp;
     }
 
     /**
@@ -85,8 +129,14 @@ public class MyLinkedList
      * @return the Integer at the specified position in this list
      */
     public Integer get(int index) {
-        // TODO: modify the code here
-        return null;
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node current = first;
+        for(int i = 0; i < index; i++){
+            current = current.next;
+        }
+        return current.value;
     }
 
     /**
@@ -97,7 +147,17 @@ public class MyLinkedList
      * @throws NullPointerException if item is null
      */
     public void set(int index, Integer item) {
-        // TODO: your code goes here
+        if(item == null){
+            throw new NullPointerException();
+        }
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node current = first;
+        for(int i = 0; i < index; i++){
+            current = current.next;
+        }
+        current.value = item;
     }
 
     /**
@@ -105,8 +165,7 @@ public class MyLinkedList
      * @return the number of Integers in this list
      */
     public int size() {
-        // TODO: modify the code here
-        return 0;
+        return size;
     }
 
     /**
@@ -118,8 +177,17 @@ public class MyLinkedList
      * @throws NullPointerException if item is null
      */
     public int indexOf(Integer item) {
-        // TODO: modify the code here
-        return 0;
+        if(item == null){
+            throw new NullPointerException();
+        }
+        Node current = first;
+        for(int i = 0; i < size; i++){
+            if(current.value.equals(item)){
+                return i;
+            }
+            current = current.next;
+        }
+        return -1;
     }
 
     /**
@@ -129,8 +197,10 @@ public class MyLinkedList
      * @throws NullPointerException if item is null
      */
     public boolean contains(Integer item) {
-        // TODO: modify the code here
-        return false;
+        if(item == null){
+            throw new NullPointerException();
+        }
+        return indexOf(item) != -1;
     }
 
     /**
@@ -138,7 +208,9 @@ public class MyLinkedList
      * call returns.
      */
     public void clear() {
-        // TODO: your code goes here
+        // garbage collection will handle this automatically
+        first = null;
+        size = 0;
     }
 
     /**
@@ -146,7 +218,6 @@ public class MyLinkedList
      * @return true if this list is empty
      */
     public boolean isEmpty() {
-        // TODO: modify the code here
-        return false;
+        return size == 0;
     }
 }

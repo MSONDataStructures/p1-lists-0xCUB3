@@ -19,13 +19,14 @@
 public class MyArrayList
 {
     private Integer[] list;
+    private int size;
 
     /**
      * Constructs an empty list with an initial capacity of ten.
      */
     public MyArrayList() {
         list = new Integer[10];
-        // TODO: you can add code here
+        size = 0;
     }
 
     /**
@@ -34,7 +35,11 @@ public class MyArrayList
      * @throws NullPointerException if item is null
      */
     public void addLast(Integer item) {
-        // TODO: your code goes here
+        if(item == null){
+            throw new NullPointerException();
+        }
+        ensureCapacity();
+        list[size++] = item;
     }
 
     /**
@@ -46,7 +51,18 @@ public class MyArrayList
      * @throws NullPointerException if item is null
      */
     public void add(int index, Integer item) {
-        // TODO: your code goes here
+        if(item == null){
+            throw new NullPointerException();
+        }
+        if(index < 0 || index > size){
+            throw new IndexOutOfBoundsException();
+        }
+        ensureCapacity();
+        for(int i = size; i > index; i--){
+            list[i] = list[i - 1];
+        }
+        list[index] = item;
+        size++;
     }
 
     /**
@@ -56,8 +72,15 @@ public class MyArrayList
      * @return the element that was removed from the list
      */
     public Integer remove(int index) {
-        // TODO: modify the code here
-        return null;
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Integer temp = list[index];
+        for(int i = index; i < size - 1; i++){
+            list[i] = list[i + 1];
+        }
+        size--;
+        return temp;
     }
 
     /**
@@ -66,8 +89,10 @@ public class MyArrayList
      * @return the Integer at the specified position in this list
      */
     public Integer get(int index) {
-        // TODO: modify the code here
-        return null;
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        return list[index];
     }
 
     /**
@@ -78,7 +103,13 @@ public class MyArrayList
      * @throws NullPointerException if item is null
      */
     public void set(int index, Integer item) {
-        // TODO: your code goes here
+        if(item == null){
+            throw new NullPointerException();
+        }
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        list[index] = item;
     }
 
     /**
@@ -86,8 +117,7 @@ public class MyArrayList
      * @return the number of Integers in this list
      */
     public int size() {
-        // TODO: modify the code here
-        return 0;
+        return size;
     }
 
     /**
@@ -99,8 +129,15 @@ public class MyArrayList
      * @throws NullPointerException if item is null
      */
     public int indexOf(Integer item) {
-        // TODO: modify the code here
-        return 0;
+        if(item == null){
+            throw new NullPointerException();
+        }
+        for(int i = 0; i < size; i++){
+            if(list[i].equals(item)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -110,8 +147,10 @@ public class MyArrayList
      * @throws NullPointerException if item is null
      */
     public boolean contains(Integer item) {
-        // TODO: modify the code here
-        return false;
+        if(item == null){
+            throw new NullPointerException();
+        }
+        return indexOf(item) != -1;
     }
 
     /**
@@ -119,7 +158,7 @@ public class MyArrayList
      * @post the capacity of the array should not change
      */
     public void clear() {
-        // TODO: your code goes here
+        size = 0;
     }
 
     /**
@@ -127,7 +166,19 @@ public class MyArrayList
      * @return true if this list is empty
      */
     public boolean isEmpty() {
-        // TODO: modify the code here
-        return false;
+        return size == 0;
+    }
+
+    /**
+     * Increases the capacity of the underlying array if it is full.
+     */
+    private void ensureCapacity() {
+        if(size == list.length){
+            Integer[] newList = new Integer[list.length * 2];
+            for(int i = 0; i < list.length; i++){
+                newList[i] = list[i];
+            }
+            list = newList;
+        }
     }
 }
