@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  * The MyArrayList class is the implementation of an array list of integers.
  * <p>
@@ -16,16 +19,16 @@
  * and you will need to throw the <code>NullPointerException</code> in places
  * as specified in the Javadoc and the JUnit <code>MyArrayListTest</code> class.
  */
-public class MyArrayList
+public class MyArrayList implements Iterable<Integer>
 {
-    private Integer[] list;
+    private Integer[] array;
     private int size;
 
     /**
      * Constructs an empty list with an initial capacity of ten.
      */
     public MyArrayList() {
-        list = new Integer[10];
+        array = new Integer[10];
         size = 0;
     }
 
@@ -39,7 +42,7 @@ public class MyArrayList
             throw new NullPointerException();
         }
         ensureCapacity();
-        list[size++] = item;
+        array[size++] = item;
     }
 
     /**
@@ -59,9 +62,9 @@ public class MyArrayList
         }
         ensureCapacity();
         for(int i = size; i > index; i--){
-            list[i] = list[i - 1];
+            array[i] = array[i - 1];
         }
-        list[index] = item;
+        array[index] = item;
         size++;
     }
 
@@ -75,9 +78,9 @@ public class MyArrayList
         if(index < 0 || index >= size){
             throw new IndexOutOfBoundsException();
         }
-        Integer temp = list[index];
+        Integer temp = array[index];
         for(int i = index; i < size - 1; i++){
-            list[i] = list[i + 1];
+            array[i] = array[i + 1];
         }
         size--;
         return temp;
@@ -92,7 +95,7 @@ public class MyArrayList
         if(index < 0 || index >= size){
             throw new IndexOutOfBoundsException();
         }
-        return list[index];
+        return array[index];
     }
 
     /**
@@ -109,7 +112,7 @@ public class MyArrayList
         if(index < 0 || index >= size){
             throw new IndexOutOfBoundsException();
         }
-        list[index] = item;
+        array[index] = item;
     }
 
     /**
@@ -133,7 +136,7 @@ public class MyArrayList
             throw new NullPointerException();
         }
         for(int i = 0; i < size; i++){
-            if(list[i].equals(item)){
+            if(array[i].equals(item)){
                 return i;
             }
         }
@@ -173,12 +176,56 @@ public class MyArrayList
      * Increases the capacity of the underlying array if it is full.
      */
     private void ensureCapacity() {
-        if(size == list.length){
-            Integer[] newList = new Integer[list.length * 2];
-            for(int i = 0; i < list.length; i++){
-                newList[i] = list[i];
+        if (size == array.length) {
+            Integer[] newArray = new Integer[array.length * 2];
+            for (int i = 0; i < size; i++) {
+                newArray[i] = array[i];
             }
-            list = newList;
+            array = newArray;
+        }
+    }
+
+    /**
+     * Iterator Stuff
+     */
+
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     *
+     * @return an iterator over the elements in this list in proper sequence
+     */
+    @Override
+    public Iterator<Integer> iterator() {
+        return new MyArrayListIterator();
+    }
+
+    private class MyArrayListIterator implements Iterator<Integer> {
+        private int currentIndex = 0;
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public Integer next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return array[currentIndex++];
         }
     }
 }

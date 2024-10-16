@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class MyLinkedListTest {
 
@@ -240,5 +242,41 @@ public class MyLinkedListTest {
         assertThrows(NullPointerException.class,
                 () -> smallMLL.contains(null),
                 "Argument to contains cannot be null.");
+    }
+
+    // I ADDED MORE TESTS SPECIFICALLY FOR ITERATORS
+
+    @Test
+    public void testIteratorBasic() {
+        MyLinkedList list = new MyLinkedList();
+        list.addFirst(3);
+        list.addFirst(2);
+        list.addFirst(1);
+
+        Iterator<Integer> iterator = list.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(1, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(2, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(3, iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testIteratorEmptyList() {
+        MyLinkedList list = new MyLinkedList();
+        Iterator<Integer> iterator = list.iterator();
+        assertFalse(iterator.hasNext());
+        assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    public void testIteratorNoSuchElementException() {
+        MyLinkedList list = new MyLinkedList();
+        list.addFirst(1);
+        Iterator<Integer> iterator = list.iterator();
+        iterator.next(); // Consume the only element
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 }

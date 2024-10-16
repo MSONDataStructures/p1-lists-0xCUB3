@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  * The MyLinkedList class is the implementation of a singly-linked list of
  * integers.
@@ -21,7 +24,7 @@
  * avoid the <code>IndexOutOfBoundsException</code> and throw the
  * <code>NullPointerException</code> where noted.
  */
-public class MyLinkedList
+public class MyLinkedList implements Iterable<Integer>
 {
     /**
      * The Node class is a private inner class of the <code>MyLinkedList</code>
@@ -219,5 +222,51 @@ public class MyLinkedList
      */
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    /**
+     * Iterator Stuff
+     */
+
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     *
+     * @return an iterator over the elements in this list in proper sequence
+     */
+    @Override
+    public Iterator<Integer> iterator() {
+        return new MyLinkedListIterator();
+    }
+
+    private class MyLinkedListIterator implements Iterator<Integer> {
+        private Node current = first;
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public Integer next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            Integer value = current.value;
+            current = current.next;
+            return value;
+        }
     }
 }

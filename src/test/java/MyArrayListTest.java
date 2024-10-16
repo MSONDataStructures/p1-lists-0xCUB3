@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class MyArrayListTest {
 
@@ -232,5 +234,41 @@ public class MyArrayListTest {
         assertThrows(NullPointerException.class,
                 () -> smallMAL.contains(null),
                 "Argument to contains cannot be null.");
+    }
+
+    // I ADDED SOME MORE TESTS SPECIFICALLY FOR ITERATORS
+
+    @Test
+    public void testIteratorBasic() {
+        MyArrayList list = new MyArrayList();
+        list.addLast(1);
+        list.addLast(2);
+        list.addLast(3);
+
+        Iterator<Integer> iterator = list.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(1, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(2, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(3, iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testIteratorEmptyList() {
+        MyArrayList list = new MyArrayList();
+        Iterator<Integer> iterator = list.iterator();
+        assertFalse(iterator.hasNext());
+        assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    public void testIteratorNoSuchElementException() {
+        MyArrayList list = new MyArrayList();
+        list.addLast(1);
+        Iterator<Integer> iterator = list.iterator();
+        iterator.next(); // Consume the only element
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 }
