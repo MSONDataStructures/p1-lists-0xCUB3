@@ -188,7 +188,6 @@ public class MyArrayList implements Iterable<Integer>
     /**
      * Iterator Stuff
      */
-
     /**
      * Returns an iterator over the elements in this list in proper sequence.
      *
